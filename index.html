@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YellowWorld</title>
+<style>
+  :root{
+    --yt-orange:#e0d000;
+    --yt-orange-dark:#cc9900;
+    --panel-bg:#ffffff;
+    --panel-border:#c5c5c5;
+    --module-header:#f1f1f1;
+    --text-dark:#333333;
+    --text-link:#1b0ab5;
+    --page-bg-top:#fdfbe0;
+    --page-bg-bottom:#e8e36a;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin:0;
+    padding:0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:13px;
+    color: var(--text-dark);
+    background:
+      radial-gradient(circle at 15% 0%, #fffde8 0%, transparent 45%),
+      linear-gradient(180deg, var(--page-bg-top) 0%, var(--page-bg-bottom) 100%);
+    background-attachment: fixed;
+  }
+
+  a { color: var(--text-link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ===== TOP BAR ===== */
+  .topbar {
+    background:#1b1b1b;
+    color:#ddd;
+    font-size:11px;
+    padding:4px 12px;
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+  }
+  .topbar a { color:#ccc; }
+  .topbar a:hover { color:#fff; text-decoration:underline; }
+
+  /* ===== HEADER ===== */
+  .siteHeader {
+    background: linear-gradient(180deg,#333 0%,#111 100%);
+    padding:10px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:4px solid var(--yt-orange);
+  }
+  .logo {
+    font-size:30px;
+    font-weight:bold;
+    color:#ffffff;
+    letter-spacing:-1px;
+    text-transform:lowercase;
+  }
+  .logo span { color: var(--yt-orange); }
+  .logo small {
+    display:block;
+    font-size:10px;
+    color:#999;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-top:-4px;
+  }
+  .searchBox {
+    display:flex;
+    gap:0;
+  }
+  .searchBox input[type=text]{
+    width:260px;
+    padding:6px 8px;
+    border:1px solid #888;
+    border-radius:2px 0 0 2px;
+    font-size:12px;
+  }
+  .searchBox button{
+    background: linear-gradient(180deg,#f6f6a0,#dede4a);
+    border:1px solid #999;
+    border-left:none;
+    padding:0 14px;
+    border-radius:0 2px 2px 0;
+    cursor:pointer;
+    font-weight:bold;
+  }
+
+  /* ===== CHANNEL BANNER ===== */
+  .channelBanner {
+    background: repeating-linear-gradient(45deg,#f5f1a8,#f5f1a8 20px,#f0e97a 20px,#f0e97a 40px);
+    animation: bannerShift 8s linear infinite;
+    border-bottom:1px solid #bbb;
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+  }
+
+  @keyframes bannerShift {
+    0% { background-position: 0 0; }
+    100% { background-position: 56.57px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .channelBanner { animation: none; }
+  }
+  .avatar {
+    width:100px;
+    height:100px;
+    background:#fff;
+    border:3px solid #fff;
+    outline:2px solid #999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:44px;
+    font-weight:bold;
+    color:var(--yt-orange-dark);
+    box-shadow:2px 2px 6px rgba(0,0,0,.3);
+    flex-shrink:0;
+  }
+  .channelMeta h1 {
+    margin:0 0 4px 0;
+    font-size:26px;
+    color:#222;
+    text-shadow: 1px 1px 0 #fff;
+  }
+  .channelMeta .handle { color:#555; font-size:12px; margin-bottom:6px; }
+  .subBtn {
+    background: linear-gradient(180deg,#e0e0e0,#b8b8b8);
+    border:1px solid #888;
+    border-radius:3px;
+    padding:6px 16px;
+    font-weight:bold;
+    font-size:12px;
+    color:#222;
+    cursor:pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+  }
+  .subBtn:hover { background: linear-gradient(180deg,#eaeaea,#c4c4c4); }
+  .subCount { margin-left:8px; font-size:11px; color:#555; }
+
+  /* ===== NAV TABS ===== */
+  .navTabs {
+    background:#333;
+    display:flex;
+    padding:0 20px;
+    border-bottom:3px solid var(--yt-orange);
+  }
+  .navTabs a {
+    color:#eee;
+    padding:10px 16px;
+    font-size:12px;
+    font-weight:bold;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+  }
+  .navTabs a:hover { background:#444; text-decoration:none; }
+  .navTabs a.active { background: var(--yt-orange); color:#222; }
+
+  /* ===== LAYOUT ===== */
+  .wrap {
+    max-width:960px;
+    margin:16px auto;
+    display:flex;
+    gap:14px;
+    padding:0 14px 40px 14px;
+  }
+  .mainCol { flex:1; min-width:0; }
+  .sideCol { width:230px; flex-shrink:0; }
+
+  .module {
+    background: var(--panel-bg);
+    border:1px solid var(--panel-border);
+    border-radius:3px;
+    margin-bottom:14px;
+    box-shadow:1px 1px 3px rgba(0,0,0,.15);
+  }
+  .moduleHead {
+    background: linear-gradient(180deg,#fafafa,var(--module-header));
+    border-bottom:1px solid var(--panel-border);
+    padding:6px 10px;
+    font-size:12px;
+    font-weight:bold;
+    color:#555;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+  }
+  .moduleBody { padding:12px; }
+
+  /* Featured video */
+  .featured .moduleBody { padding:0; }
+  .videoFrame {
+    background:#000;
+    aspect-ratio:16/9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    position:relative;
+  }
+  .playBtn {
+    width:64px; height:64px;
+    background:rgba(200,0,0,.85);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .playBtn:before {
+    content:"";
+    border-style:solid;
+    border-width:12px 0 12px 20px;
+    border-color:transparent transparent transparent #fff;
+    margin-left:4px;
+  }
+  .videoInfoBar {
+    padding:10px 12px;
+    border-top:1px solid #eee;
+  }
+  .videoInfoBar h3 { margin:0 0 4px 0; font-size:15px; color:#222; }
+  .videoInfoBar .stats { color:#777; font-size:11px; }
+
+  /* About text */
+  .aboutText p { line-height:1.6; margin:0 0 10px 0; }
+  .aboutText .tagline {
+    font-style:italic;
+    color:#666;
+    border-left:3px solid var(--yt-orange);
+    padding-left:10px;
+    margin-bottom:14px;
+  }
+
+  /* Recent activity list */
+  .activityItem {
+    display:flex;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px dashed #ddd;
+  }
+  .activityItem:last-child { border-bottom:none; }
+  .thumb {
+    width:80px;
+    height:50px;
+    background: linear-gradient(135deg,#dede4a,#b8b000);
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:10px;
+    font-weight:bold;
+    border:1px solid #999;
+  }
+  .activityItem .title { font-size:12px; font-weight:bold; color:#1b0ab5; }
+  .activityItem .desc { font-size:11px; color:#777; margin-top:2px; }
+
+  /* Sidebar modules */
+  .infoList { list-style:none; margin:0; padding:0; font-size:12px; }
+  .infoList li { padding:5px 0; border-bottom:1px solid #eee; }
+  .infoList li:last-child { border-bottom:none; }
+  .infoList .lbl { color:#888; display:block; font-size:10px; text-transform:uppercase; }
+
+  .friendsGrid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+  }
+  .friendBox {
+    aspect-ratio:1;
+    background: linear-gradient(135deg,#f0e97a,#c9c000);
+    border:1px solid #999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    font-weight:bold;
+    color:#fff;
+    text-shadow:1px 1px 1px rgba(0,0,0,.3);
+  }
+
+  .statBar {
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    padding:4px 0;
+    border-bottom:1px solid #eee;
+  }
+  .statBar:last-child { border-bottom:none; }
+  .statBar b { color:#222; }
+
+  /* Comments */
+  .comment { display:flex; gap:10px; padding:10px 0; border-bottom:1px solid #eee; }
+  .comment:last-child { border-bottom:none; }
+  .commentAvatar {
+    width:36px; height:36px;
+    background:#ccc;
+    border:1px solid #999;
+    flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:bold;color:#666;
+  }
+  .comment .cname { font-weight:bold; font-size:12px; color:#1b0ab5; }
+  .comment .ctext { font-size:12px; color:#333; margin-top:2px; }
+  .comment .ctime { font-size:10px; color:#999; margin-top:3px; }
+
+  .footer {
+    text-align:center;
+    font-size:11px;
+    color:#555;
+    padding:16px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="#">THIS IS MY REAL WEBSITE, NOT AN IMPERSONATOR.</a>
+  </div>
+
+  <div class="siteHeader">
+    <div class="logo">yellow<span>world</span><small>creator of TOTM</small></div>
+    <div class="searchBox">
+      <input type="text" placeholder="Search YellowWorld...">
+      <button>Search</button>
+    </div>
+  </div>
+
+  <div class="channelBanner">
+    <div class="avatar">YW</div>
+    <div class="channelMeta">
+      <h1>YellowWorld</h1>
+      <div class="handle">youtube.com/@YellowWorldTOTMU &middot; Joined December 19, 2020 &middot; UK</div>
+      <button class="subBtn">Subscribe</button>
+    </div>
+  </div>
+
+  <div class="navTabs">
+    <a href="#featured" class="active">Featured</a>
+    <a href="#about">About</a>
+    <a href="#friends">Channels</a>
+  </div>
+
+  <div class="wrap">
+    <div class="mainCol">
+
+      <div class="module featured" id="featured">
+        <div class="moduleHead">Featured</div>
+        <div class="moduleBody">
+          <div class="videoFrame">
+            <div class="playBtn"></div>
+          </div>
+          <div class="videoInfoBar">
+            <h3>Welcome to YellowWorld</h3>
+            <div class="stats">featured video</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="module" id="about">
+        <div class="moduleHead">About Me</div>
+        <div class="moduleBody aboutText">
+          <p class="tagline">"TOTM creator and developer"</p>
+          <p>
+            hey, i'm YellowWorld. i build stuff such as games, radio, wrestling shows, whatever
+            comes to mind, entirely from a browser. no local PC, no fancy setup. just
+            github.dev, GitHub Actions, and an xbox. i also created streamyard's longest running series,
+            which is Talk Of The Mock (TOTM).
+          </p>
+          <p>
+            this page is basically my corner of the internet, done up like it's still 2010,
+            because that's when the internet felt like it belonged to the people making it.
+          </p>
+          <p style="font-size:11px; color:#888; border-top:1px dashed #ddd; padding-top:10px; margin-top:14px;">
+            Impersonation? Not on this channel. If anyone is impersonating me, change your
+            description to this.<br><br>
+            &copy; 2020-2026 Independent YouTube Networks & ZeffixOW Affiliated
+            Productions. All rights reserved under Creative Commons 4.0
+          </p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="moduleHead">Recent Activity</div>
+        <div class="moduleBody">
+          <p style="font-size:12px; color:#888;">recent uploads go here</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sideCol">
+
+      <div class="module">
+        <div class="moduleHead">Channel Info</div>
+        <div class="moduleBody">
+          <ul class="infoList">
+            <li><span class="lbl">Joined</span>December 19, 2020</li>
+            <li><span class="lbl">Location</span>United Kingdom</li>
+            <li><span class="lbl">Channel Views</span>17,300</li>
+            <li><span class="lbl">Currently building</span>a lot, honestly</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="moduleHead">Stats</div>
+        <div class="moduleBody">
+          <div class="statBar"><span>Subscribers</span><b>&mdash;</b></div>
+          <div class="statBar"><span>Videos</span><b>&mdash;</b></div>
+          <div class="statBar"><span>Playlists</span><b>&mdash;</b></div>
+          <div class="statBar"><span>Friends</span><b>9</b></div>
+        </div>
+      </div>
+
+      <div class="module" id="friends">
+        <div class="moduleHead">Channels</div>
+        <div class="moduleBody">
+          <div class="friendsGrid">
+            <div class="friendBox">AG</div>
+            <div class="friendBox">TM</div>
+            <div class="friendBox">AW</div>
+            <div class="friendBox">XFB</div>
+            <div class="friendBox">LTV</div>
+            <div class="friendBox">+4</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2020&ndash;2026 Independent YouTube Networks &amp; ZeffixOW Affiliated Productions &middot; built entirely in a browser, no PC required
+  </div>
+
+</body>
+</html>
